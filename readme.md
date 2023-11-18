@@ -1,1 +1,1 @@
-# SimPY: Simplex Method Linear Programming written in PYTHON
+# SimPY: Simplex Method Linear Programming written in Python

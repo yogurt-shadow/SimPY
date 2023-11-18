@@ -1,4 +1,5 @@
 from typing import List
+import numpy as np
 
 class range:
    def __init__(self, l, u):
@@ -43,6 +44,7 @@ class solver:
    def normalize(self):
       self.normalize_vars()
       self.normalize_constraints()
+      self.generate_matrix()
    
    """
    change vars according to their range
@@ -124,6 +126,16 @@ class solver:
          self.cons_map[idx][id] = 1
       else:
          raise ValueError('invalid constraint relation %r' % cons.rela)
+      
+   def generate_matrix(self):
+      self.rhs = np.array()
+      coeffs = [[0 for i in range(self.new_vars)] for j in range(len(self.cons_list))]
+      for i in range(len(self.cons_list)):
+         for v_id, v_coeff in self.cons_map[i]:
+            coeffs[i][v_id] = v_coeff
+            self.rhs.append(self.cons_list[i].rhs)
+      self.coeff_matrix = np.mat(coeffs)
+      self.rhs = self.rhs.reshape((-1, 1))
 
    def solve(self):
       self.normalize()
